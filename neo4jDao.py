@@ -24,11 +24,12 @@ def create_transaction_relation(payer, payee, invoice_id, amount, time):
     """
     创建交易关系，箭头由payer指向payee，含有交易金额和对应的发票图片名称属性
     """
-    rel = Relationship(payer, "TRANSACTION", payee)
-    rel["amount"] = amount
-    rel["invoice_id"] = invoice_id
-    rel["time"] = time
-    graph.create(rel)
+    payer_name = payer['name']
+    payee_name = payee['name']
+    # 创建关系
+    query = "MATCH (p:Company {name: $payer}), (q:Company {name: $payee}) " \
+            "CREATE (p)-[r:Trade {amount: $amount, invoice_id: $invoice_id, time: $time}]->(q)"
+    graph.run(query, payer=payer_name, payee=payee_name, amount=amount, invoice_id=invoice_id, time=time)
 
 
 # 清楚数据库中所有节点和关系
