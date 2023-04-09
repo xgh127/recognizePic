@@ -110,10 +110,10 @@ def insert_many(datas):
         if 'AmountInFiguers' in datas[d]:
             amount = float(datas[d]['AmountInFiguers'])
             storeFigure = int(amount * 100)
-        print('debug:')
-        print(datas[d]['InvoiceDate'] == '2016年06月12日')
-        print(amount <= 2700.00)
-        print(datas[d]['PurchasserName'] == '深圳市购机汇网络有限公司')
+        # print('debug:')
+        # print(datas[d]['InvoiceDate'] == '2016年06月12日')
+        # print(amount <= 2700.00)
+        # print(datas[d]['PurchasserName'] == '深圳市购机汇网络有限公司')
         if 'InvoiceDate' not in datas[d] or 'AmountInFiguers' not in datas[d] or 'SellerName' not in datas[d]:
             status = '转人工'
         elif datas[d]['InvoiceDate'] == '2016年06月12日' and amount <= 2700.00 and datas[d][

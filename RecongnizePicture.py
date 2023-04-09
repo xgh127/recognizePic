@@ -48,11 +48,12 @@ def get_VAT_invoice_context(pic):
         headers = {'content-type': 'application/x-www-form-urlencoded'}
         response = requests.post(request_url, data=params, headers=headers)
         if response:
-            print("发票识别的所有内容")
-            print(response.json())
+            # print("发票识别的所有内容")
+            # print(response.json())
             json1 = response.json()
             filename = os.path.basename(pic).split('.')[0]
-            print(filename)
+
+
             data['invoiceName'] = filename
             data['SellerRegisterNum'] = json1['words_result']['SellerRegisterNum']
             data['InvoiceDate'] = json1['words_result']['InvoiceDate']
@@ -60,7 +61,8 @@ def get_VAT_invoice_context(pic):
             data['SellerName'] = json1['words_result']['SellerName']
             data['AmountInFiguers'] = json1['words_result']['AmountInFiguers']
             # print(data['AmountInFiguers'])
-            print('正文内容获取成功！')
+            # 输出获取某个文件内容成功
+            print('获取图片正文内容成功！'+filename)
         return data
 
     except Exception as e:
