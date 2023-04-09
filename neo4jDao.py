@@ -3,12 +3,9 @@ from py2neo import Relationship, NodeMatcher
 from py2neo import Node
 
 import mysqlDao
-
-uri = "bolt://localhost:7687"
-username = "neo4j"
-password = "xgh20001112"
+import config
 # 定义全局的Neo4j连接对象
-graph = py2neo.Graph(uri, auth=(username, password))
+graph = py2neo.Graph(config.neo4j_uri, auth=(config.neo4j_username, config.neo4j_password))
 
 
 def create_or_update_node(label, primary_key, data):

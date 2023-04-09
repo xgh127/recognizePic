@@ -2,7 +2,7 @@ import base64
 import os
 
 import requests
-
+import config
 
 # 识别增值税发票的api
 def get_VAT_invoice_context(pic):
@@ -42,7 +42,7 @@ def get_VAT_invoice_context(pic):
         params = {"image": base64_img}
 
         # 这里需要替换成自己的access_token
-        access_token = '24.130b011efc0b61849724e8b79030fbb2.2592000.1683202522.282335-32001559'
+        access_token = config.vat_access_token
 
         request_url = request_url + "?access_token=" + access_token
         headers = {'content-type': 'application/x-www-form-urlencoded'}

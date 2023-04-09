@@ -7,9 +7,10 @@ from openpyxl.chart import PieChart, Reference, BarChart
 from openpyxl.chart.label import DataLabelList
 
 from RecongnizePicture import get_VAT_invoice_context
+import config
 
 # 连接数据库，localhost：3306，用户名是root，密码是xgh200011125850，数据库是RPA
-conn = pymysql.connect(host='localhost', port=3306, user='root', password='xgh200011125850', db='rpa', charset='utf8')
+conn = pymysql.connect(host='localhost', port=3306, user=config.mysql_username, password=config.mysql_password, db='rpa', charset='utf8')
 # 获取游标
 cursor = conn.cursor()
 
@@ -247,7 +248,7 @@ def export_to_excel():
     ws.cell(row=1, column=8, value='数据总条数')
     ws.cell(row=2, column=8, value=count_all())
     # 保存excel表格
-    wb.save('test.xlsx')
+    wb.save(config.excel_filename)
 
 
 # 添加一个饼图
@@ -290,8 +291,8 @@ def add_pie_chart(ws, resultLen):
 
 # 定义一个函数，删除导出的excel表格
 def delete_excel():
-    if os.path.exists('test.xlsx'):
-        os.remove('test.xlsx')
+    if os.path.exists(config.excel_filename):
+        os.remove(config.excel_filename)
 
 
 # 定义一个主函数，用于测试
@@ -305,7 +306,7 @@ def main():
     # print('通过的有：', count_pass())
     # print('不通过的有：', count_not_pass())
     # print('转人工的有：', count_to_human())
-    pic = 'aistudio-发票数据集/b/b11.jpg'
+    pic = config.testPicPath
     datas = []
     data = get_VAT_invoice_context(pic)
     datas.append(data)
