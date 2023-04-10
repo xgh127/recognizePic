@@ -15,3 +15,5 @@ config.py
 *.xlsx
 # 忽略aistudio-发票数据集文件夹
 aistudio-发票数据集/
+# 忽略_pychache_文件夹
+__pycache__/

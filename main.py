@@ -1,6 +1,7 @@
 import time
 
 import RecongnizePicture as rp
+import clearAll
 import mongoDao
 import mysqlDao
 import neo4jDao
@@ -32,6 +33,8 @@ def batch_get_datas(folder_path, batch_size):
 
 # 处理B文件夹下的所有图片
 def process_B_folder():
+    # 清空数据库中所有发票信息
+    clearAll.clear_all()
     print('开始执行！！！')
     # 执行开始时间
     start_time = time.time()

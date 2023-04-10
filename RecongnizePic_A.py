@@ -7,6 +7,7 @@ import xlwt
 import datetime
 import util
 
+
 def pics(path):
     print('正在生成图片路径')
     # 生成一个空列表用于存放图片路径
@@ -19,6 +20,7 @@ def pics(path):
     print('图片路径生成成功！')
     return pics
 
+
 def datas(pics):
     datas = []
 
@@ -26,6 +28,7 @@ def datas(pics):
         data = get_context(p)
         datas.append(data)
     return datas
+
 
 def get_context(pic):
     print('正在获取图片正文内容！')
@@ -38,12 +41,11 @@ def get_context(pic):
     file_name = file_name.split('.')[0]
     max_size = 2000
 
-
     if max(im.size) > max_size:
         scale_factor = max_size / max(im.size)
         new_size = tuple(int(dim * scale_factor) for dim in im.size)
         im = im.resize(new_size, resample=Image.LANCZOS)
-        im.save(pic, format='JPEG', optimize = True, quality=70)
+        im.save(pic, format='JPEG', optimize=True, quality=70)
     f = open(pic, 'rb')
     img = base64.b64encode(f.read())
     try:
@@ -71,8 +73,9 @@ def get_context(pic):
     except Exception as e:
         print(e)
         print('不能识别')
-        im.save("aistudio-发票数据集/c/"+ file_name+ ".jpg", format='JPEG', optimize = True, quality=70)
+        im.save("aistudio-发票数据集/c/" + file_name + ".jpg", format='JPEG', optimize=True, quality=70)
     return data
+
 
 def data_save(datas):
     print('正在写入数据！')
@@ -95,16 +98,16 @@ def data_save(datas):
     num = 0
     for i in range(len(title)):
         sheet.col(i).width = 7777
-        sheet.write(0, i, title[i],style)
+        sheet.write(0, i, title[i], style)
     for d in range(len(datas)):
         if datas[d]:
             print("写入")
 
-            sheet.write(num + 1, 0, datas[d]['InvoiceNum'],style)
-            sheet.write(num + 1, 1, datas[d]['TaxiNum'],style)
-            sheet.write(num + 1, 2, datas[d]['PickupTime'],style)
-            sheet.write(num + 1, 3, datas[d]['DropoffTime'],style)
-            sheet.write(num + 1, 4, datas[d]['TotalFare'],style)
+            sheet.write(num + 1, 0, datas[d]['InvoiceNum'], style)
+            sheet.write(num + 1, 1, datas[d]['TaxiNum'], style)
+            sheet.write(num + 1, 2, datas[d]['PickupTime'], style)
+            sheet.write(num + 1, 3, datas[d]['DropoffTime'], style)
+            sheet.write(num + 1, 4, datas[d]['TotalFare'], style)
             sheet.write(num + 1, 5, datas[d]['Province'], style)
             sheet.write(num + 1, 6, datas[d]['City'], style)
             sheet.write(num + 1, 7, datas[d]['PricePerkm'], style)
@@ -115,9 +118,8 @@ def data_save(datas):
 
     print('数据写入成功！')
     now = datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
-    book.save(now+'出租车发票.xls')
+    book.save(now + '出租车发票.xls')
     return
-
 
 
 # 用于测试
@@ -136,6 +138,7 @@ def main():
 
     # storage.storage_pics(path)
     print('执行结束！')
+
 
 if __name__ == '__main__':
     main()

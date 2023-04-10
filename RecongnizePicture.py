@@ -4,6 +4,7 @@ import os
 import requests
 import config
 
+
 # 识别增值税发票的api
 def get_VAT_invoice_context(pic):
     print('正在获取图片正文内容！')
@@ -53,7 +54,6 @@ def get_VAT_invoice_context(pic):
             json1 = response.json()
             filename = os.path.basename(pic).split('.')[0]
 
-
             data['invoiceName'] = filename
             data['SellerRegisterNum'] = json1['words_result']['SellerRegisterNum']
             data['InvoiceDate'] = json1['words_result']['InvoiceDate']
@@ -62,7 +62,7 @@ def get_VAT_invoice_context(pic):
             data['AmountInFiguers'] = json1['words_result']['AmountInFiguers']
             # print(data['AmountInFiguers'])
             # 输出获取某个文件内容成功
-            print('获取图片正文内容成功！'+filename)
+            print('获取图片正文内容成功！' + filename)
         return data
 
     except Exception as e:
