@@ -10,5 +10,5 @@ pycharm，python3.11
 2.测试过小数量的发票识别，多个财务关系识别
 3.测试过大数量的发票识别，batch_size = 10
 4.完成发邮件功能
-# github test
+# GitHub test
 1.测试collaborator提交后我能否提交
