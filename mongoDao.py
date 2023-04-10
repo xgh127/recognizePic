@@ -51,11 +51,18 @@ def delete_all():
     print(res)
 
 
+def test_insert():
+    invoiceImg = InvoiceImg('b300', 'this is a test')
+    # 将发票图片对象插入数据库
+    res = originalDataB.insert_one(invoiceImg.__dict__)
+
+
 # 写一个测试主函数，用来测试各种函数是否正确
 def main():
     # insert_one(0)
     # store_img_to_mongodb('aistudio-发票数据集/test')
-    delete_all()
+    # delete_all()
+    test_insert()
 
 
 # 运行主函数
