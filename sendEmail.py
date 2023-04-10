@@ -44,6 +44,7 @@ def test_send_email_with_excel_attachment():
     body = '发票处理结果'
     excel_file_path = config.excel_filename
     send_email_with_excel_attachment(email_sender, email_password, email_receiver, subject, body, excel_file_path)
+    print("发送邮件成功！")
 
 
 if __name__ == '__main__':
