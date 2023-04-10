@@ -4,6 +4,7 @@ import RecongnizePicture as rp
 import mongoDao
 import mysqlDao
 import neo4jDao
+import sendEmail
 import util
 
 '''
@@ -29,24 +30,31 @@ def batch_get_datas(folder_path, batch_size):
         print('插入数据成功！')
 
 
-def main():
+# 处理B文件夹下的所有图片
+def process_B_folder():
     print('开始执行！！！')
     # 执行开始时间
     start_time = time.time()
+    # 批量读取图片内容，存到mysql数据库中
     batch_get_datas(bFilePath, 10)
-    # 分析和应用
     # 将图片内容存到excel表格中，分析此次审批的发票是否合规
     mysqlDao.export_to_excel()
     print('导出excel成功！')
     # 识别财务主体关系
     neo4jDao.create_all_transaction()
 
-    # 数据存储
     # 将原始图片存到mongodb数据库中
     mongoDao.store_img_to_mongodb(bFilePath)
+
+    # 发送邮件
+    sendEmail.test_send_email_with_excel_attachment()
     # 执行结束时间
     end_time = time.time()
     print('执行结束！用时：', end_time - start_time)
+
+
+def main():
+    process_B_folder()
 
 
 if __name__ == '__main__':

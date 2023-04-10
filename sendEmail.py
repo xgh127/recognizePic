@@ -27,7 +27,7 @@ def send_email_with_excel_attachment(email_sender, email_password, email_receive
         attach.add_header('Content-Disposition', 'attachment', filename=excel_file_path)
         msg.attach(attach)
 
-    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server = smtplib.SMTP('smtp.qq.com', 587)
     server.starttls()
     server.login(email_sender, email_password)
     text = msg.as_string()
