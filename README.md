@@ -1,3 +1,11 @@
+<!--
+ * @Author: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
+ * @Date: 2023-04-10 13:09:58
+ * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
+ * @LastEditTime: 2023-04-10 14:47:14
+ * @FilePath: \undefinedd:\2022-2023-2\pingtaisheji\gitRPA\recognizePic\README.md
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
 # recognizePic
 这是个基于百度增值税发票识别接口的自动化发票流程处理项目
 # 包含内容
@@ -10,5 +18,6 @@ pycharm，python3.11
 2.测试过小数量的发票识别，多个财务关系识别
 3.测试过大数量的发票识别，batch_size = 10
 4.完成发邮件功能
-# GitHub test
-1.测试collaborator提交后我能否提交
+# 测试
+5.你好呀这里是测试
+xgh:测试通过！现在你可以试试我push之后你那边的操作了~~
