@@ -9,7 +9,7 @@ from openpyxl.chart.label import DataLabelList
 from RecongnizePicture import get_VAT_invoice_context
 import config
 
-# 连接数据库，localhost：3306，用户名是root，密码是xgh200011125850，数据库是RPA
+# 连接数据库
 conn = pymysql.connect(host='localhost', port=3306, user=config.mysql_username, password=config.mysql_password, db='rpa', charset='utf8')
 # 获取游标
 cursor = conn.cursor()
@@ -127,9 +127,10 @@ def insert_many(datas):
         insert_one(invoiceInfo)
     print("插入mysql成功")
 
+# 这是对a数据集的处理
+# 定义一个插入到general的表函数，传入发票信息对象，将发票信息插入数据库
 
-# 定义一个函数，获取一张发票的信息，并插入到数据库
-# def get_one_invoice_info(i):
+
 # 定义一个查询函数，查询数据库中所有发票信息并返回
 def select_all():
     # 定义sql语句

@@ -27,6 +27,7 @@
 ├── test.py 用于测试
 ├── store_with_excel.py 用于将数据存储到excel中,但是现在已经不用了，因为整合到了mysqlDao里了
 ├── config.py 用于配置一些参数,这里参数是写在我本地的，需要的可以换成自己的参数
+├── generalMysqlDao.py 处理通用发票的mysqlDao
 ```
 ## 架构图
 ![架构图](assets/架构图3.png)
@@ -37,6 +38,7 @@ pycharm，python3.11
 2.测试过小数量的发票识别，多个财务关系识别<br/>
 3.测试过大数量的发票识别，batch_size = 10<br/>
 4.完成发邮件功能<br/>
+5.新增完成通用发票之后的处理程序<br/>
 # 测试
 5.你好呀这里是测试
 xgh:测试通过！现在你可以试试我push之后你那边的操作了~~

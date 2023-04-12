@@ -35,10 +35,10 @@ def main():
     # 将图片内容写入excel表格
     # img_path = 'aistudio-发票数据集/test/b1.jpg'
     # datas = rp.get_VAT_invoice_context(img_path)
-    datas = get_datas(get_VAT_invoice_img_from_test())
-    print(datas)
-    md.insert_many(datas)
-    swe.save_vatInvoice_data(datas)
+    # datas = get_datas(get_VAT_invoice_img_from_test())
+    # print(datas)
+    # md.insert_many(datas)
+    # swe.save_vatInvoice_data(datas)
 
 
 # 运行主函数

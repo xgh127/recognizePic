@@ -7,6 +7,7 @@ import util
 client = pymongo.MongoClient(host='localhost', port=27017)
 db = client['RPA']
 originalDataB = db['originalDataB']
+originalDataA = db['originalDataA']
 
 
 # 定义发票图片类，属性为发票图片名称和发票图片的base64编码
@@ -21,19 +22,6 @@ class InvoiceImg:
         self.img_base64 = img_base64
 
 
-# 利用util插入数据,从b文件夹中读取图片,插入第index个图片，以index为参数
-def insert_one(index):
-    # 获取图片名称
-    name = util.get_image_name_from_b(index)
-    # 获取图片base64编码
-    img_base64 = util.get_image_base64_from_b(index)
-    # 创建发票图片对象
-    invoiceImg = InvoiceImg(name, img_base64)
-    # 将发票图片对象插入数据库
-    res = originalDataB.insert_one(invoiceImg.__dict__)
-    print(res)
-
-
 # 数据存储，将原始图片存到mongodb数据库中
 def store_img_to_mongodb(curPath):
     # 定义for循环，将所有b文件夹下的图片存到mongodb数据库中
@@ -42,6 +30,17 @@ def store_img_to_mongodb(curPath):
             picPath = curPath + '/' + filename
             invoiceImg = InvoiceImg(filename, util.get_image_base64_from_path(picPath))
             res = originalDataB.insert_one(invoiceImg.__dict__)
+            print(res)
+
+
+# 数据存储，将原始图片存到mongodb数据库中
+def store_gengral_img_to_mongodb(curPath):
+    # 定义for循环，将所有b文件夹下的图片存到mongodb数据库中
+    for filename in os.listdir(curPath):
+        if filename.endswith('jpg') or filename.endswith('png'):
+            picPath = curPath + '/' + filename
+            invoiceImg = InvoiceImg(filename, util.get_image_base64_from_path(picPath))
+            res = originalDataA.insert_one(invoiceImg.__dict__)
             print(res)
 
 
@@ -62,7 +61,9 @@ def main():
     # insert_one(0)
     # store_img_to_mongodb('aistudio-发票数据集/test')
     # delete_all()
-    test_insert()
+    # test_insert()
+    store_gengral_img_to_mongodb('aistudio-发票数据集/test')
+    # originalDataA.delete_many({})
 
 
 # 运行主函数
