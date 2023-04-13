@@ -1,0 +1,20 @@
+### Example user template template
+### Example user template
+
+# IntelliJ project files
+.idea
+*.iml
+
+# 忽略.gitignore文件
+.gitignore
+# 忽略venv文件夹
+venv/
+# 忽略config.py文件
+config.py
+# 忽略所有以.xlsx结尾的文件
+*.xlsx
+# 忽略aistudio-发票数据集文件夹
+aistudio-发票数据集/
+test/
+# 忽略_pychache_文件夹
+__pycache__/
