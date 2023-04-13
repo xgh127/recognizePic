@@ -143,7 +143,7 @@ def test_get_VAT_invoice_context():
 
 # 测试get_general_invoice_context函数
 def test_get_general_invoice_context():
-    pic = 'aistudio-发票数据集/a/a2.jpg'
+    pic = 'aistudio-发票数据集/a/a1.jpg'
     data = get_general_invoice_context(pic)
     print(data)
 

@@ -80,6 +80,12 @@ def get_batch_datas(picPaths):
         datas.append(data)
     return datas
 
+def get_batch_datas_general(picPaths):
+    datas = []
+    for p in picPaths:
+        data = rp.get_general_invoice_context(p)
+        datas.append(data)
+    return datas
 
 # 定义一个测试主函数，用来测试各种函数是否正确
 def main():

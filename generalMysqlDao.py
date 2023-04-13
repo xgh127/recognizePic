@@ -98,37 +98,75 @@ def insertInvoiceInfoList(datas):
     # invoiceInfo = general_invoice_info()
     for d in range(len(datas)):
         invoiceInfo.setInvoiceName(datas[d]['invoiceName'])
-        if 'InvoiceDate' in datas[d]:
+        status_date = True  # 默认正确识别日期
+        # 未识别出结果
+        if 'exception' in datas[d]:
+            invoiceInfo.setInvoiceDate('1970-01-01')
+            invoiceInfo.setPurchasserName("")
+            invoiceInfo.setSellerName("")
+            invoiceInfo.setAmountInFiguers(0)
+            invoiceInfo.setStatus('转人工')
+            insertInvoiceInfo(invoiceInfo)
+            continue
+        # api可以识别，检测识别结果是否有误
+        if datas[d]['InvoiceDate']:
             # 如果日期存在的话，将日期转为mysql中的YYYY-MM-DD格式，方便后续查询，而Invoice的格式为YYYY年MM月DD日
             InvoiceDate = datas[d]['InvoiceDate'].replace('年', '-').replace('月', '-').replace('日', '')
-            invoiceInfo.setInvoiceDate(InvoiceDate)
+            dy = InvoiceDate.split('-')
+            if not dy[0]:
+                status_date = False
+                dy[0] = '1970'
+            if not dy[1]:
+                status_date = False
+                dy[1] = '01'
+            if not dy[2]:
+                status_date = False
+                dy[2] = '01'
+
+            invoiceInfo.setInvoiceDate(dy[0]+'-'+dy[1]+'-'+dy[2])
         else:
+            status_date = False
             invoiceInfo.setInvoiceDate('1970-01-01')
-        if 'PurchasserName' in datas[d]:
+        #if 'PurchasserName' in datas[d]:
+        if datas[d]['PurchasserName']:
             PurchasserName = datas[d]['PurchasserName']
             invoiceInfo.setPurchasserName(PurchasserName)
         else:
             invoiceInfo.setPurchasserName("")
-        if 'SellerName' in datas[d]:
+        # if 'SellerName' in datas[d]:
+        if datas[d]['SellerName']:
             SellerName = datas[d]['SellerName']
             invoiceInfo.setSellerName(SellerName)
         else:
             invoiceInfo.setSellerName("")
-        if 'AmountInFiguers' in datas[d]:
+        # if 'AmountInFiguers' in datas[d]:
+        if datas[d]['AmountInFiguers']:
             amount = float(datas[d]['AmountInFiguers'])
             storeFigure = int(amount * 100)
             invoiceInfo.setAmountInFiguers(storeFigure)
         else:
             invoiceInfo.setAmountInFiguers(0)
-        # 如果发票信息中缺少发票日期、金额、付款方的信息，视为转人工
-        if 'InvoiceDate' not in datas[d] or 'AmountInFiguers' not in datas[d] or 'PurchasserName' not in datas[d]:
-            invoiceInfo.setStatus('转人工')
-        # 如果付款方为"浙江大学"、时间在2015年内、审批金额在1600元以内的发票视为合规
-        elif datas[d]['PurchasserName'] == '浙江大学' and InvoiceDate < '2015-01-01' and amount <= 1600.00:
-            invoiceInfo.setStatus('通过')
-        else:
-            invoiceInfo.setStatus('不通过')
+        # # 如果发票信息中缺少发票日期、金额、付款方的信息，视为转人工
+        # if 'InvoiceDate' not in datas[d] or 'AmountInFiguers' not in datas[d] or 'PurchasserName' not in datas[d]:
+        #     invoiceInfo.setStatus('转人工')
+        # # 如果付款方为"浙江大学"、时间在2015年内、审批金额在1600元以内的发票视为合规
+        # elif datas[d]['PurchasserName'] == '浙江大学' and InvoiceDate < '2015-01-01' and amount <= 1600.00:
+        #     invoiceInfo.setStatus('通过')
+        # else:
+        #     invoiceInfo.setStatus('不通过')
         # 调用insert_one函数，将发票信息插入数据库
+        # 当年月日有一个没识别出来时，均转人工
+        if status_date :
+            if  datas[d]['AmountInFiguers'] and datas[d]['PurchasserName']:
+                if datas[d]['PurchasserName'] == '浙江大学' and InvoiceDate < '2015-01-01' and amount <= 1600.00:
+                    invoiceInfo.setStatus('通过')
+                else:
+                    invoiceInfo.setStatus('不通过')
+            else:
+                invoiceInfo.setStatus('转人工')
+        else:
+            invoiceInfo.setStatus('转人工')
+
         insertInvoiceInfo(invoiceInfo)
     print("插入mysql成功")
 
@@ -145,20 +183,31 @@ def testInsertInvoiceInfo():
              'invoiceName': 'test1'}
     # 某些字段为空的情况
     data2 = {'InvoiceDate': '2014年01月01日', 'PurchasserName': '浙江大学2', 'SellerName': '浙江大学',
+             'AmountInFiguers': '',
              'invoiceName': 'test2'}
-    data3 = {'InvoiceDate': '2014年01月01日', 'PurchasserName': '浙江大学2', 'AmountInFiguers': '100',
+    data3 = {'InvoiceDate': '2014年01月01日', 'PurchasserName': '浙江大学2', 'SellerName': '',
+             'AmountInFiguers': '100',
              'invoiceName': 'test3'}
-    data4 = {'PurchasserName': '浙江大学', 'SellerName': '浙江大学', 'AmountInFiguers': '100', 'invoiceName': 'test4'}
-    data5 = {'InvoiceDate': '2014年01月01日', 'SellerName': '浙江大学2', 'AmountInFiguers': '100',
+    data4 = {'InvoiceDate': '', 'PurchasserName': '浙江大学', 'SellerName': '浙江大学',
+             'AmountInFiguers': '100',
+             'invoiceName': 'test4'}
+    data5 = {'InvoiceDate': '2014年01月01日', 'PurchasserName': '', 'SellerName': '浙江大学2',
+             'AmountInFiguers': '100',
              'invoiceName': 'test5'}
-    data6 = {'InvoiceDate': '2014年01月01日', 'PurchasserName': '浙江大学2', 'AmountInFiguers': '100',
+    data6 = {'InvoiceDate': '2014年01月01日', 'PurchasserName': '浙江大学2', 'SellerName':'',
+             'AmountInFiguers': '100',
              'invoiceName': 'test6'}
     data7 = {'InvoiceDate': '2014年01月01日', 'PurchasserName': '浙江大学2', 'SellerName': '浙江大学',
+             'AmountInFiguers': '',
              'invoiceName': 'test7'}
     # 日期不通过的情况
+    data8 = {'InvoiceDate': '年月日', 'PurchasserName': '浙江大学2', 'SellerName': '浙江大学',
+             'AmountInFiguers': '100',
+             'invoiceName': 'test8'}
     data9 = {'InvoiceDate': '2019年01月01日', 'PurchasserName': '浙江大学2', 'SellerName': '浙江大学',
              'AmountInFiguers': '100',
              'invoiceName': 'test9'}
+
     # 日期通过的情况
     data10 = {'InvoiceDate': '2014年01月01日', 'PurchasserName': '浙江大学', 'SellerName': '浙江大学2',
               'AmountInFiguers': '100',
@@ -172,13 +221,14 @@ def testInsertInvoiceInfo():
               'AmountInFiguers': '100',
               'invoiceName': 'test12'}
     # 把上述数据添加到datas中
-    datas.append(data1)
-    datas.append(data2)
-    datas.append(data3)
+    # datas.append(data1)
+    # datas.append(data2)
+    # datas.append(data3)
     datas.append(data4)
-    datas.append(data5)
-    datas.append(data6)
-    datas.append(data7)
+    # datas.append(data5)
+    # datas.append(data6)
+    # datas.append(data7)
+    datas.append(data8)
     datas.append(data9)
     datas.append(data10)
     datas.append(data11)
@@ -192,6 +242,15 @@ def queryInvoiceInfoOfTransaction():
     sql = "select * from general where PurchasserName != '' and SellerName != '' and status != '转人工'"
     cursor.execute(sql)
     results = cursor.fetchall()
+    print("查询成功")
+    return results
+
+# 查询函数，查询所有status等于转人工的发票，返回invoiceName
+def select_invoice_of_email():
+    sql = "SELECT invoiceName FROM general WHERE status = '转人工'"
+    cursor.execute(sql)
+    results = cursor.fetchall()
+    print(list(results))
     print("查询成功")
     return results
 
@@ -212,6 +271,35 @@ def countTable():
     print(" general 表记录数：", results[0][0])
     return results[0][0]
 
+
+# 定义一个函数做数据统计，统计status是通过的有多少条数据
+def count_pass():
+    sql = "select count(*) from general where status='通过'"
+    cursor.execute(sql)
+    result = cursor.fetchall()
+    return result[0][0]
+
+# 定义一个函数做数据统计，统计status是不通过的有多少条数据
+def count_not_pass():
+    # 定义sql语句
+    sql = "select count(*) from general where status='不通过'"
+    # 执行sql语句
+    cursor.execute(sql)
+    # 获取查询结果
+    result = cursor.fetchall()
+    # 打印查询结果
+    return result[0][0]
+
+# 定义一个函数做数据统计，统计status是转人工的有多少条数据
+def count_to_human():
+    # 定义sql语句
+    sql = "select count(*) from general where status='转人工'"
+    # 执行sql语句
+    cursor.execute(sql)
+    # 获取查询结果
+    result = cursor.fetchall()
+    # 打印查询结果
+    return result[0][0]
 
 # 导出excel
 def export_to_excel():
@@ -249,15 +337,26 @@ def export_to_excel():
     ws.cell(row=1, column=8, value='数据总条数')
     ws.cell(row=2, column=8, value=countTable())
     # 保存excel表格
-    wb.save("test2.xlsx")
+    wb.save(config.excel_filename_general)
 
 
 # 删除excel文件
 def delete_excel():
-    if os.path.exists("test2.xlsx"):
-        os.remove("test2.xlsx")
+    if os.path.exists(config.excel_filename_general):
+        os.remove(config.excel_filename_general)
     else:
         print("文件不存在")
+
+
+#定义一个清空表函数，清空数据库中所有发票信息
+def delete_all():
+    # 定义sql语句
+    sql = "delete from general"
+    # 执行sql语句
+    cursor.execute(sql)
+    # 提交事务
+    conn.commit()
+    print("general清空成功")
 
 
 # 测试函数
@@ -282,7 +381,7 @@ def main():
     testInsertInvoiceInfo()
     # testDebug()
     # print(queryInvoiceInfoOfTransaction())
-    # export_to_excel()
+    export_to_excel()
 
 
 # 定义测试主函数

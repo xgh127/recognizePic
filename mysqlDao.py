@@ -26,6 +26,7 @@ class InvoiceInfo:
         self.status = ""
         self.invoiceName = ""
 
+
     # 定义构造函数，传入发票信息
     def __init__(self, InvoiceDate, SellerRegisterNum, PurchasserName, SellerName, AmountInFiguers, status,
                  invoiceName):
@@ -99,8 +100,10 @@ def insert_many(datas):
     # 定义一个for循环，将datas里信息提取出来构造invoiceInfo对象列表
     amount = INT_MAX
     for d in range(len(datas)):
+
         if 'InvoiceDate' in datas[d]:
-            InvoiceDate = datas[d]['InvoiceDate']
+            InvoiceDate = datas[d]['InvoiceDate'].replace('年', '-').replace('月', '-').replace('日', '')
+
         if 'SellerRegisterNum' in datas[d]:
             SellerRegisterNum = datas[d]['SellerRegisterNum']
         if 'PurchasserName' in datas[d]:
@@ -114,6 +117,9 @@ def insert_many(datas):
         # print(datas[d]['InvoiceDate'] == '2016年06月12日')
         # print(amount <= 2700.00)
         # print(datas[d]['PurchasserName'] == '深圳市购机汇网络有限公司')
+        if datas[d]['InvoiceDate'] == '2016年06月12日' : i1 = 1
+        if amount <= 2700.00 : i2 = 2
+        if datas[d]['PurchasserName'] == '深圳市购机汇网络有限公司' :  i3 =3
         if 'InvoiceDate' not in datas[d] or 'AmountInFiguers' not in datas[d] or 'SellerName' not in datas[d]:
             status = '转人工'
         elif datas[d]['InvoiceDate'] == '2016年06月12日' and amount <= 2700.00 and datas[d][
@@ -127,8 +133,10 @@ def insert_many(datas):
         insert_one(invoiceInfo)
     print("插入mysql成功")
 
-# 这是对a数据集的处理
+# 这是对a数据集的处理（在generalMysqlDao.py函数里）
 # 定义一个插入到general的表函数，传入发票信息对象，将发票信息插入数据库
+
+
 
 
 # 定义一个查询函数，查询数据库中所有发票信息并返回
@@ -142,6 +150,14 @@ def select_all():
     # 打印查询结果
     return result
 
+def select_invoice_of_email():
+    sql = "SELECT invoiceName FROM general WHERE status = '转人工'"
+    cursor.execute(sql)
+    results = cursor.fetchall()
+    # print(results)
+    print("查询成功")
+    return results
+
 
 # 定义一个清空表函数，清空数据库中所有发票信息
 def delete_all():
@@ -151,7 +167,7 @@ def delete_all():
     cursor.execute(sql)
     # 提交事务
     conn.commit()
-    print("清空成功")
+    print("vat清空成功")
 
 
 # 定义一个函数做数据统计，统计总过有多少条数据

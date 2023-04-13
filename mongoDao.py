@@ -50,6 +50,13 @@ def delete_all():
     print(res)
 
 
+
+#定义一个函数，删除数据库中的所有数据
+def delete_all_general():
+    res = originalDataA.delete_many({})
+    print(res)
+
+
 def test_insert():
     invoiceImg = InvoiceImg('b300', 'this is a test')
     # 将发票图片对象插入数据库

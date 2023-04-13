@@ -95,12 +95,13 @@ def create_all_transaction_of_general():
 
 # 定义主函数，测试Neo4j数据库的连接
 def main():
-    # clear_all()
-    # create_transaction('深圳市购机汇网络有限公司', '广州晶东贸易有限公司', 'b1', 3495)
+    clear_all()
+    #create_transaction('深圳市购机汇网络有限公司', '广州晶东贸易有限公司', 'b1', 3495, '2014-01-01 00:00:00')
 
     # create_all_transaction()
-    # create_all_transaction_of_general()
-    clear_zju()
+    create_all_transaction_of_general()
+    # clear_all()
+
 
 
 # 执行主函数
