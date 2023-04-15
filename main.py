@@ -7,7 +7,7 @@ import mysqlDao
 import neo4jDao
 import sendEmail
 import generalMysqlDao
-import util
+import util 
 
 '''
 增值税发票识别
@@ -20,9 +20,9 @@ TEST_TOTAL = 10
 # 传入图片路径list，遍历列表调用get_VAT_invoice_context函数获取图片内容
 
 
-filePath = 'aistudio-发票数据集/test'
-bFilePath = 'test/b'
-aFilePath = 'test/a'
+filePath = 'test'
+bFilePath = 'aistudio-发票数据集/b'
+aFilePath = 'aistudio-发票数据集/a'
 
 
 def batch_get_datas_B(folder_path, batch_size):
@@ -92,7 +92,7 @@ def process_A_folder():
 def main():
     # 清空数据库中所有发票信息
     clearAll.clear_all()
-    # process_B_folder()
+    process_B_folder()
     # process_A_folder()
 
 

@@ -67,6 +67,7 @@ def get_VAT_invoice_context(pic):
 
     except Exception as e:
         # print("exception get")
+        data['invoiceName'] = os.path.basename(pic).split('.')[0]
         print(e)
     return data
 
@@ -136,7 +137,7 @@ def get_general_invoice_context(pic):
 
 # 测试get_VAT_invoice_context函数
 def test_get_VAT_invoice_context():
-    pic = 'aistudio-发票数据集/b/b0.jpg'
+    pic = 'aistudio-发票数据集/b/b150.jpg'
     data = get_VAT_invoice_context(pic)
     print(data)
 
@@ -157,8 +158,8 @@ def test_get_VAT_invoice_context_in_afile():
 
 # 写一个主函数用于测试
 def main():
-    # test_get_VAT_invoice_context()
-    test_get_general_invoice_context()
+    test_get_VAT_invoice_context()
+    # test_get_general_invoice_context()
     # test_get_VAT_invoice_context_in_afile()
 
 

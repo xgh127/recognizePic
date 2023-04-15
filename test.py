@@ -5,7 +5,7 @@ import mysqlDao as md
 
 # 从aistudio-发票数据集/test文件夹中读取图片路径
 def get_VAT_invoice_img_from_test():
-    folder_path = 'aistudio-发票数据集/test/'
+    folder_path = 'test/'
     # 读取文件夹下所有以jpg结尾的文件，并将图片名和folder_path拼接成图片路径,然后调用get_VAT_invoice_context函数获取图片内容
     # 生成一个空列表用于存放图片路径
     pics = []

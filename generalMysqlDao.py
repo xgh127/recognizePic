@@ -4,6 +4,8 @@ import os
 import openpyxl
 import pymysql
 from _testcapi import INT_MAX
+from openpyxl.chart import BarChart, Reference, PieChart
+from openpyxl.chart.label import DataLabelList
 
 import config
 
@@ -158,7 +160,7 @@ def insertInvoiceInfoList(datas):
         # 当年月日有一个没识别出来时，均转人工
         if status_date :
             if  datas[d]['AmountInFiguers'] and datas[d]['PurchasserName']:
-                if datas[d]['PurchasserName'] == '浙江大学' and InvoiceDate < '2015-01-01' and amount <= 1600.00:
+                if datas[d]['PurchasserName'] == '浙江大学' and InvoiceDate > '2015-01-01' and InvoiceDate < '2015-12-31' and amount <= 1600.00:
                     invoiceInfo.setStatus('通过')
                 else:
                     invoiceInfo.setStatus('不通过')
@@ -172,69 +174,69 @@ def insertInvoiceInfoList(datas):
 
 
 # 测试函数
-def testInsertInvoiceInfo():
-    # 测试插入函数
-    invoiceInfo = general_invoice_info('2019-01-01', '浙江大学', '浙江大学2', 10000, '通过', 'test')
-    insertInvoiceInfo(invoiceInfo)
-    # 测试批量插入函数，包括一些异常情况
-    datas = []
-    data1 = {'InvoiceDate': '2014年01月01日', 'PurchasserName': '浙江大学2', 'SellerName': '浙江大学',
-             'AmountInFiguers': '100',
-             'invoiceName': 'test1'}
-    # 某些字段为空的情况
-    data2 = {'InvoiceDate': '2014年01月01日', 'PurchasserName': '浙江大学2', 'SellerName': '浙江大学',
-             'AmountInFiguers': '',
-             'invoiceName': 'test2'}
-    data3 = {'InvoiceDate': '2014年01月01日', 'PurchasserName': '浙江大学2', 'SellerName': '',
-             'AmountInFiguers': '100',
-             'invoiceName': 'test3'}
-    data4 = {'InvoiceDate': '', 'PurchasserName': '浙江大学', 'SellerName': '浙江大学',
-             'AmountInFiguers': '100',
-             'invoiceName': 'test4'}
-    data5 = {'InvoiceDate': '2014年01月01日', 'PurchasserName': '', 'SellerName': '浙江大学2',
-             'AmountInFiguers': '100',
-             'invoiceName': 'test5'}
-    data6 = {'InvoiceDate': '2014年01月01日', 'PurchasserName': '浙江大学2', 'SellerName':'',
-             'AmountInFiguers': '100',
-             'invoiceName': 'test6'}
-    data7 = {'InvoiceDate': '2014年01月01日', 'PurchasserName': '浙江大学2', 'SellerName': '浙江大学',
-             'AmountInFiguers': '',
-             'invoiceName': 'test7'}
-    # 日期不通过的情况
-    data8 = {'InvoiceDate': '年月日', 'PurchasserName': '浙江大学2', 'SellerName': '浙江大学',
-             'AmountInFiguers': '100',
-             'invoiceName': 'test8'}
-    data9 = {'InvoiceDate': '2019年01月01日', 'PurchasserName': '浙江大学2', 'SellerName': '浙江大学',
-             'AmountInFiguers': '100',
-             'invoiceName': 'test9'}
-
-    # 日期通过的情况
-    data10 = {'InvoiceDate': '2014年01月01日', 'PurchasserName': '浙江大学', 'SellerName': '浙江大学2',
-              'AmountInFiguers': '100',
-              'invoiceName': 'test10'}
-    # 金额不通过的情况
-    data11 = {'InvoiceDate': '2014年01月01日', 'PurchasserName': '浙江大学', 'SellerName': '浙江大学2',
-              'AmountInFiguers': '1700',
-              'invoiceName': 'test11'}
-    # 买方不是浙江大学的情况
-    data12 = {'InvoiceDate': '2014年01月01日', 'PurchasserName': '浙江大学1', 'SellerName': '浙江大学2',
-              'AmountInFiguers': '100',
-              'invoiceName': 'test12'}
-    # 把上述数据添加到datas中
-    # datas.append(data1)
-    # datas.append(data2)
-    # datas.append(data3)
-    datas.append(data4)
-    # datas.append(data5)
-    # datas.append(data6)
-    # datas.append(data7)
-    datas.append(data8)
-    datas.append(data9)
-    datas.append(data10)
-    datas.append(data11)
-    datas.append(data12)
-    # 批量插入
-    insertInvoiceInfoList(datas)
+# def testInsertInvoiceInfo():
+#     # 测试插入函数
+#     invoiceInfo = general_invoice_info('2019-01-01', '浙江大学', '浙江大学2', 10000, '通过', 'test')
+#     insertInvoiceInfo(invoiceInfo)
+#     # 测试批量插入函数，包括一些异常情况
+#     datas = []
+#     data1 = {'InvoiceDate': '2014年01月01日', 'PurchasserName': '浙江大学2', 'SellerName': '浙江大学',
+#              'AmountInFiguers': '100',
+#              'invoiceName': 'test1'}
+#     # 某些字段为空的情况
+#     data2 = {'InvoiceDate': '2014年01月01日', 'PurchasserName': '浙江大学2', 'SellerName': '浙江大学',
+#              'AmountInFiguers': '',
+#              'invoiceName': 'test2'}
+#     data3 = {'InvoiceDate': '2014年01月01日', 'PurchasserName': '浙江大学2', 'SellerName': '',
+#              'AmountInFiguers': '100',
+#              'invoiceName': 'test3'}
+#     data4 = {'InvoiceDate': '', 'PurchasserName': '浙江大学', 'SellerName': '浙江大学',
+#              'AmountInFiguers': '100',
+#              'invoiceName': 'test4'}
+#     data5 = {'InvoiceDate': '2014年01月01日', 'PurchasserName': '', 'SellerName': '浙江大学2',
+#              'AmountInFiguers': '100',
+#              'invoiceName': 'test5'}
+#     data6 = {'InvoiceDate': '2014年01月01日', 'PurchasserName': '浙江大学2', 'SellerName':'',
+#              'AmountInFiguers': '100',
+#              'invoiceName': 'test6'}
+#     data7 = {'InvoiceDate': '2014年01月01日', 'PurchasserName': '浙江大学2', 'SellerName': '浙江大学',
+#              'AmountInFiguers': '',
+#              'invoiceName': 'test7'}
+#     # 日期不通过的情况
+#     data8 = {'InvoiceDate': '年月日', 'PurchasserName': '浙江大学2', 'SellerName': '浙江大学',
+#              'AmountInFiguers': '100',
+#              'invoiceName': 'test8'}
+#     data9 = {'InvoiceDate': '2019年01月01日', 'PurchasserName': '浙江大学2', 'SellerName': '浙江大学',
+#              'AmountInFiguers': '100',
+#              'invoiceName': 'test9'}
+#
+#     # 日期通过的情况
+#     data10 = {'InvoiceDate': '2014年01月01日', 'PurchasserName': '浙江大学', 'SellerName': '浙江大学2',
+#               'AmountInFiguers': '100',
+#               'invoiceName': 'test10'}
+#     # 金额不通过的情况
+#     data11 = {'InvoiceDate': '2014年01月01日', 'PurchasserName': '浙江大学', 'SellerName': '浙江大学2',
+#               'AmountInFiguers': '1700',
+#               'invoiceName': 'test11'}
+#     # 买方不是浙江大学的情况
+#     data12 = {'InvoiceDate': '2014年01月01日', 'PurchasserName': '浙江大学1', 'SellerName': '浙江大学2',
+#               'AmountInFiguers': '100',
+#               'invoiceName': 'test12'}
+#     # 把上述数据添加到datas中
+#     # datas.append(data1)
+#     # datas.append(data2)
+#     # datas.append(data3)
+#     datas.append(data4)
+#     # datas.append(data5)
+#     # datas.append(data6)
+#     # datas.append(data7)
+#     datas.append(data8)
+#     datas.append(data9)
+#     datas.append(data10)
+#     datas.append(data11)
+#     datas.append(data12)
+#     # 批量插入
+#     insertInvoiceInfoList(datas)
 
 
 # 查询函数，查询所有PurchaseName不为空，SellerName不为空，status不等于转人工的发票信息
@@ -332,13 +334,82 @@ def export_to_excel():
         ws.cell(row=i + 2, column=5, value=amount)
         ws.cell(row=i + 2, column=6, value=result[i][6])
 
-    # add_pie_chart(ws, len(result))
+    add_pie_chart(ws, len(result))
+    add_bar_chart(ws, len(result))
     # 保存数据总条数
     ws.cell(row=1, column=8, value='数据总条数')
     ws.cell(row=2, column=8, value=countTable())
     # 保存excel表格
     wb.save(config.excel_filename_general)
 
+def add_pie_chart(ws, resultLen):
+    # 统计pass、not pass、to human三者的数量
+    # 创建饼图对象
+    # 统计status是通过的有多少条数据，写入到excel表格中
+    ws.cell(row=resultLen + 3, column=1, value='审核状态')
+    ws.cell(row=resultLen + 4, column=1, value='passed')
+    # 统计status是不通过的有多少条数据，写入到excel表格中
+    ws.cell(row=resultLen + 5, column=1, value='not_passed')
+    # 统计status是转人工的有多少条数据，写入到excel表格中
+    ws.cell(row=resultLen + 6, column=1, value='to_human')
+    ws.cell(row=resultLen + 3, column=2, value='审核状态总数')
+    ws.cell(row=resultLen + 4, column=2, value=count_pass())
+    # 统计status是不通过的有多少条数据，写入到excel表格中
+    ws.cell(row=resultLen + 5, column=2, value=count_not_pass())
+    # 统计status是转人工的有多少条数据，写入到excel表格中
+    ws.cell(row=resultLen + 6, column=2, value=count_to_human())
+    pie = PieChart()
+    # 设置饼图的数据和标签
+    data_ref = Reference(ws, min_col=2, min_row=resultLen + 3, max_col=2, max_row=resultLen + 5)
+    print(data_ref)
+    pie.add_data(data_ref, titles_from_data=True)
+    labels_ref = Reference(ws, min_col=1, min_row=resultLen + 4, max_col=1, max_row=resultLen + 5)
+    print(labels_ref)
+    pie.set_categories(labels_ref)
+    pie.style = 8  # 图表样式类型 共48种
+    pie.title = "审核状态统计"  # 图表标题
+    pie.height = 10  # 图表高度
+    pie.width = 10  # 图表宽度
+    s1 = pie.series[0]
+    s1.dLbls = DataLabelList()
+    s1.dLbls.showCatName = True  # 标签显示
+    s1.dLbls.showVal = True  # 数量显示
+    s1.dLbls.showPercent = True  # 百分比显示
+
+    ws.add_chart(pie, "G2")
+
+def add_bar_chart(ws, resultLen):
+    # 统计Top 5交易方
+    # 创建柱状图对象
+    bar = BarChart()
+    #统计卖方名称出现次数
+    seller_count = {}
+    for row in ws.iter_rows(min_row=2, values_only=True, max_row=resultLen+1):
+        seller = row[3]
+        if seller in seller_count:
+            seller_count[seller] += 1
+        else:
+            seller_count[seller] = 1
+    # 根据出现次数降序排序，并取前五个
+    top_sellers = sorted(seller_count.items(), key=lambda x: x[1], reverse=True)[1:6]
+    #统计前五个交易方及次数，写入到excel表格
+    ws.cell(row=resultLen + 7, column=1, value='卖方名称')
+    ws.cell(row=resultLen + 7, column=2, value='交易数量')
+    for i, (seller, count) in enumerate(top_sellers):
+        ws.cell(row=i + resultLen + 8, column=1, value=seller)
+        ws.cell(row=i + resultLen + 8, column=2, value=count)
+    # 画柱状图
+    chart = BarChart()
+    chart.title = "Top 5 Sellers"
+    chart.y_axis.title = "Count"
+    chart.x_axis.title = "Seller"
+
+    data = Reference(ws, min_col=2, min_row=resultLen + 7, max_row=resultLen + 12)
+    categories = Reference(ws, min_col=1, min_row=resultLen + 8, max_row=resultLen + 12)
+    chart.add_data(data, titles_from_data=True)
+    chart.set_categories(categories)
+
+    ws.add_chart(chart, "M2")
 
 # 删除excel文件
 def delete_excel():
@@ -374,11 +445,12 @@ def testDebug():
 def main():
     # # 清空general数据表
     # delete_excel()
-    clearTable()
+    # clearTable()
+    # delete_all()
     # # 测试插入函数
     # invoiceInfo = general_invoice_info('2019-01-01', '浙江大学', '浙江大学2', 10000, '通过', 'test')
     # insertInvoiceInfo(invoiceInfo)
-    testInsertInvoiceInfo()
+    # testInsertInvoiceInfo()
     # testDebug()
     # print(queryInvoiceInfoOfTransaction())
     export_to_excel()

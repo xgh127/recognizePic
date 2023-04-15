@@ -132,7 +132,7 @@ def main():
     #
     # data_save(Datas)
     # storage.storage_invoice_approval(Datas)
-    content = get_context('aistudio-发票数据集/a/a0.jpg')
+    content = get_context('aistudio/a/a0.jpg')
     # data_save(content)
     print(content)
 

@@ -5,6 +5,7 @@ import pymysql
 from _testcapi import INT_MAX
 from openpyxl.chart import PieChart, Reference, BarChart
 from openpyxl.chart.label import DataLabelList
+from openpyxl.chart import BarChart, Reference, Series
 
 from RecongnizePicture import get_VAT_invoice_context
 import config
@@ -99,8 +100,16 @@ def insert_one(invoiceInfo):
 def insert_many(datas):
     # 定义一个for循环，将datas里信息提取出来构造invoiceInfo对象列表
     amount = INT_MAX
+    InvoiceDate = ""
+    SellerRegisterNum = ''
+    PurchasserName = ''
+    SellerName = ''
+    storeFigure = ''
+    invoiceName = ''
     for d in range(len(datas)):
 
+        if 'invoiceName' in datas[d]:
+            invoiceName = datas[d]['invoiceName']
         if 'InvoiceDate' in datas[d]:
             InvoiceDate = datas[d]['InvoiceDate'].replace('年', '-').replace('月', '-').replace('日', '')
 
@@ -117,9 +126,9 @@ def insert_many(datas):
         # print(datas[d]['InvoiceDate'] == '2016年06月12日')
         # print(amount <= 2700.00)
         # print(datas[d]['PurchasserName'] == '深圳市购机汇网络有限公司')
-        if datas[d]['InvoiceDate'] == '2016年06月12日' : i1 = 1
-        if amount <= 2700.00 : i2 = 2
-        if datas[d]['PurchasserName'] == '深圳市购机汇网络有限公司' :  i3 =3
+        # if datas[d]['InvoiceDate'] == '2016年06月12日' : i1 = 1
+        # if amount <= 2700.00 : i2 = 2
+        # if datas[d]['PurchasserName'] == '深圳市购机汇网络有限公司' :  i3 =3
         if 'InvoiceDate' not in datas[d] or 'AmountInFiguers' not in datas[d] or 'SellerName' not in datas[d]:
             status = '转人工'
         elif datas[d]['InvoiceDate'] == '2016年06月12日' and amount <= 2700.00 and datas[d][
@@ -128,7 +137,8 @@ def insert_many(datas):
         else:
             status = '不通过'
         invoiceInfo = InvoiceInfo(InvoiceDate, SellerRegisterNum, PurchasserName, SellerName, storeFigure, status,
-                                  datas[d]['invoiceName'])
+                                  invoiceName)
+        print('insert '+datas[d]['invoiceName']+' successfully')
         # 调用insert_one函数，将发票信息插入数据库
         insert_one(invoiceInfo)
     print("插入mysql成功")
@@ -151,7 +161,7 @@ def select_all():
     return result
 
 def select_invoice_of_email():
-    sql = "SELECT invoiceName FROM general WHERE status = '转人工'"
+    sql = "SELECT invoiceName FROM vat WHERE status = '转人工'"
     cursor.execute(sql)
     results = cursor.fetchall()
     # print(results)
@@ -306,6 +316,7 @@ def add_pie_chart(ws, resultLen):
     ws.add_chart(pie, "G2")
 
 
+
 # 定义一个函数，删除导出的excel表格
 def delete_excel():
     if os.path.exists(config.excel_filename):
@@ -323,11 +334,11 @@ def main():
     # print('通过的有：', count_pass())
     # print('不通过的有：', count_not_pass())
     # print('转人工的有：', count_to_human())
-    pic = config.testPicPath
-    datas = []
-    data = get_VAT_invoice_context(pic)
-    datas.append(data)
-    insert_many(datas)
+    # pic = config.testPicPath
+    # datas = []
+    # data = get_VAT_invoice_context(pic)
+    # datas.append(data)
+    # insert_many(datas)
     export_to_excel()
     # delete_all()
 

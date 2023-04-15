@@ -98,7 +98,7 @@ def main():
     clear_all()
     #create_transaction('深圳市购机汇网络有限公司', '广州晶东贸易有限公司', 'b1', 3495, '2014-01-01 00:00:00')
 
-    # create_all_transaction()
+    create_all_transaction()
     create_all_transaction_of_general()
     # clear_all()
 

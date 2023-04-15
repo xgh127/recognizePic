@@ -28,12 +28,15 @@ def clear_all():
 def main():
     # 清空数据库中所有发票信息
     mysqlDao.delete_all()
+    generalMysqlDao.delete_all()
     print("mysql清空成功")
     # 清空mongodb中所有发票信息
     mongoDao.delete_all()
+    mongoDao.delete_all_general()
     print("mongodb清空成功")
     # 删除excel表格
     mysqlDao.delete_excel()
+    generalMysqlDao.delete_excel()
     print("excel删除成功")
     # 清空neo4j中所有节点和关系
     neo4jDao.clear_all()
